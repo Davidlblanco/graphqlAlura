@@ -7,7 +7,7 @@ const userResolvers = require('./user/resolvers/userResolvers')
 const UsersAPI = require('./user/datasource/user')
 
 const turmaSchema = require('./turma/schema/turma.graphql')
-const turmaResolvers = require('./turma/resolvers/TurmaResolvers')
+const turmaResolvers = require('./turma/resolvers/turmaResolvers')
 const TurmasAPI = require('./turma/datasource/turma')
 
 const typeDefs = mergeTypeDefs([userSchema, turmaSchema])
@@ -21,18 +21,17 @@ const dbConfig = {
   }
 }
 
-const server = new ApolloServer({
+const server = new ApolloServer( { 
   typeDefs,
   resolvers,
   dataSources: () => {
     return {
       usersAPI: new UsersAPI(),
-      TurmasAPI: new TurmasAPI(dbConfig)
+      turmasAPI: new TurmasAPI(dbConfig)
     }
   },
-})
+ })
 
-
-server.listen().then(({ url }) => {
+server.listen().then(({url}) => {
   console.log(`Servidor rodando na porta ${url}`)
 })
