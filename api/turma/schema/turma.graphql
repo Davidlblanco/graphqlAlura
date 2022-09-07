@@ -11,6 +11,7 @@ scalar DateTime
     inicio: DateTime
     docente: User!
     createdAt: DateTime!
+    Matriculas:[Matricula]
   }
 
     input TurmaInput {

@@ -9,6 +9,7 @@ scalar DateTime
     email: String
     role: Role!
     createdAt: DateTime
+    Matriculas:[Matricula]
   }
 
   input UserInput {
