@@ -21,5 +21,15 @@ class MatriculasAPI extends SQLDataSource {
         this.Resposta.mensagem = "matricula confirmada"
         return this.Resposta
     }
+
+    async getMatriculasPorTurma(idTurma) {
+        const matriculas = await this.db
+            .select('*')
+            .from('matriculas')
+            .where({ turma_id: idTurma })
+        return matriculas
+    }
+
+
 }
 module.exports = MatriculasAPI
