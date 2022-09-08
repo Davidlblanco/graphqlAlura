@@ -1,5 +1,5 @@
 const { SQLDataSource } = require('datasource-sql')
-
+const DataLoader = require('dataloader')
 class TurmasAPI extends SQLDataSource {
   constructor(dbConfig) {
     super(dbConfig)
@@ -9,25 +9,30 @@ class TurmasAPI extends SQLDataSource {
   }
 
   async getTurmas() {
-    return this.db 
+    return this.db
       .select('*')
       .from('turmas')
   }
 
-  async getTurma(id) {
-    const turma = await this.db
+  turmasLoader = new DataLoader(this.getTurma.bind(this))
+  async getTurma(ids) {
+    const turmas = await this.db
       .select('*')
       .from('turmas')
-      .where({ id: Number(id)})
-    return turma[0]
+      .whereIn('id', ids)
+      .select()
+    const arrayFinal = ids.map(id => turmas.filter(turma => turma.id === id)[0])
+    return arrayFinal
   }
+
+
 
   async incluiTurma(novaTurma) {
     const novaTurmaId = await this.db
       .insert(novaTurma)
       .returning('id')
       .into('turmas')
-  
+
     const turmaInserida = await this.getTurma(novaTurmaId[0])
     return ({ ...turmaInserida })
   }
