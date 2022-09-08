@@ -30,6 +30,31 @@ class MatriculasAPI extends SQLDataSource {
         return matriculas
     }
 
+    async getMatriculasPorEstudante(idEstudante) {
+        const matriculas = await this.db
+            .select('*')
+            .from('matriculas')
+            .where({ estudante_id: idEstudante })
+        return matriculas
+    }
 
+    async deletarMatricula(idMatricula) {
+        await this.db('matriculas')
+            .where({ id: Number(idMatricula) })
+            .del()
+
+        this.Resposta.mensagem = "registro deletado"
+        return this.Resposta
+    }
+
+    async cancelarMatricula(idMatricula) {
+        await this.db
+            .update({ status: "cancelado" })
+            .where({ id: Number(idMatricula) })
+            .into('matriculas')
+
+        this.Resposta.mensagem = "matrícula cancelada"
+        return this.Resposta
+    }
 }
 module.exports = MatriculasAPI
